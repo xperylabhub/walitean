@@ -61,7 +61,7 @@ class WAL_SQLITE():
         try:
             self.fhandle = open(filepath, 'rb')
         except:
-            print 'invalid input file'
+            print('invalid input file')
             return 1
         self.fbuf = self.fhandle.read()
         self.fhandle.close()
@@ -73,7 +73,7 @@ class WAL_SQLITE():
         fileheader = _memcpy(self.fbuf[:sizeof(_WALFileHeader)], _WALFileHeader)
 
         if (fileheader.Signature != 0x377f0682) and (fileheader.Signature != 0x377f0683):
-            print 'invalid file format'
+            print('invalid file format')
             return None
         self.pagesize = fileheader.PageSize
         self.cpseqnum = fileheader.SequenceNumber
@@ -138,7 +138,7 @@ class WAL_SQLITE():
             d1[k].append(v)
 
         # remove duplicate list on dictionary
-        d = dict((k, tuple(v)) for k, v in d1.iteritems())
+        d = dict((k, tuple(v)) for k, v in d1.items())
 
         return d
 
@@ -149,7 +149,7 @@ class WAL_SQLITE():
             for prevcolumn, prevrecord in total_list:
                 if len(column) == len(prevcolumn):
                     sametable = 1
-                    for coloffset in xrange(len(column)):
+                    for coloffset in range(len(column)):
                         if ord(column[coloffset]) != (ord(column[coloffset]) & ord(prevcolumn[coloffset])):
                             if 0 == ((column[coloffset] == 'U') or (prevcolumn[coloffset] == 'U')):
                                 sametable = 0
@@ -169,11 +169,11 @@ class WAL_SQLITE():
         from exportdb import ExportSQLite
         export = ExportSQLite()
         if export.createDB(dbname) is False:
-            print '[!] File is Exists'
+            print('[!] File is Exists')
             return
 
-        for tbname, recordsinfo in newdbinfo.iteritems():
-            if len(recordsinfo[0]) is 0:
+        for tbname, recordsinfo in newdbinfo.items():
+            if len(recordsinfo[0]) == 0:
                 continue
             export.createTable(tbname, recordsinfo[0])
 
@@ -196,7 +196,7 @@ class WAL_SQLITE():
             for tbname, columninfo in schema.items():
                 columncount = len(columninfo)
                 if columncount == len(waltbname):
-                    print ' [-] %s is %s' % (waltbname, tbname)
+                    print(' [-] %s is %s' % (waltbname, tbname))
                     recordslist.append(columninfo)
                     recordslist.append(walrecords)
                     recordslist.append(True)
@@ -223,12 +223,12 @@ class WAL_SQLITE():
             if findit == False:
                 decColumn = DecodeColumn(waltbname)
                 newcolumninfo = []
-                for columnoffset in xrange(len(decColumn)):
+                for columnoffset in range(len(decColumn)):
                     dummy = []
                     dummy.append('unknown%d' % columnoffset)
                     dummy.append(decColumn[columnoffset])
                     newcolumninfo.append(dummy)
-                print ' [-] Could not find table schema %s'%waltbname
+                print(' [-] Could not find table schema %s'%waltbname)
                 newdbinfo[waltbname] = [newcolumninfo, walrecords, False]
 
         return newdbinfo    # key is tablename, value is list(columninfo, records)
@@ -284,7 +284,7 @@ def main():
     inputfile = args.file[0]
 
     if os.path.exists(inputfile) is False:
-        print '[!] File is not exists'
+        print('[!] File is not exists')
         parser.print_help()
         exit()
     
@@ -292,33 +292,35 @@ def main():
     wal_class.open(inputfile)
     frame_list = wal_class.get_frame_list()
     DBSchema = {}
-    print '[+] Check a root-page in WAL'
+    print('[+] Check a root-page in WAL')
     for data in frame_list:
         if data[0].DBPageNumber == 1:
             DBSchema = wal_class.getscheme(data[1])
             if len(DBSchema):
-                print ' [-] Find DB Schema at root-page'
+                print(' [-] Find DB Schema at root-page')
                 break
 
     if len(DBSchema) == 0 and args.maindb is not None:
-        print '[*] Could not find root-page in WAL. Now we are checking a Main DB'
+        print('[*] Could not find root-page in WAL. Now we are checking a Main DB')
         opendb = open(args.maindb[0], 'rb')
         buf = opendb.read(4096)
-        DBSchema = wal_class.getscheme(buf)
+        while len(DBSchema) <= 0 and buf:
+            DBSchema = wal_class.getscheme(buf)
+            buf = opendb.read(4096)
 
         if len(DBSchema):
-            print ' [-] Find DB Schema at %s'%args.maindb[0]
+            print(' [-] Find DB Schema at %s'%args.maindb[0])
         else:
-            print ' [-] Could not find DB Schema at %s'%args.maindb[0]
+            print(' [-] Could not find DB Schema at %s'%args.maindb[0])
 
-    print '[*] Processing..'
+    print('[*] Processing..')
     d = wal_class.process(frame_list)
 
-    print '[*] Schema Matching..'
+    print('[*] Schema Matching..')
     newdbinfo = wal_class.findvalidcolumninfo(DBSchema, d)
 
-    print '[*] Output Type : SQLite DB'
-    print '[*] File Name : %s' % args.exportfile[0]
+    print('[*] Output Type : SQLite DB')
+    print('[*] File Name : %s' % args.exportfile[0])
     wal_class.exportSqliteDB(args.exportfile[0], newdbinfo)
 
 if __name__ == "__main__":

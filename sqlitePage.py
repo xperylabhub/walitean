@@ -71,10 +71,10 @@ def hexdump(buf):
                 output += "."
 
         offset += 16
-        print output
+        print(output)
 
     if (offset == 0):
-        print "%08X:  " % (offset)
+        print("%08X:  " % (offset))
 
 
 class SQLITE_PAGE():
@@ -135,9 +135,11 @@ class SQLITE_PAGE():
 
         if type == 'INT':
             if size == 6:
-                return struct.unpack('=q', data+'\x00\x00')[0]  # signed int (6 or 8 bytes)
+                x1, x2 = struct.unpack('>HI', data)
+                return x2 | (x1 << 32)
             elif size == 7:
-                return struct.unpack('=q', data+'\x00')[0]
+                x1, x2, x3 = struct.unpack('>BHI', data)
+                return x3 | (x2 << 32) | (x1 << 48)
             elif size == 8:
                 return struct.unpack('=q', data)[0]
             elif size == 1:
@@ -145,7 +147,8 @@ class SQLITE_PAGE():
             elif size == 2:
                 return struct.unpack('=h', data)[0]  # signed int (2 bytes)
             elif size == 3:
-                struct.unpack('=i', data+'\x00')[0]  # signed int (3 bytes)
+                x1, x2 = struct.unpack('>BH', data)  # signed int (3 bytes)
+                return x2 | (x1 << 16)
             elif size == 4:
                 return struct.unpack('=i', data)[0]  # signed int (4 bytes)
 
@@ -211,9 +214,9 @@ class SQLITE_PAGE():
         elif byte == 7:
             return 'FLOAT', 8
         elif byte > 12 and (byte % 2) == 0:
-            return 'BLOB', (byte - 12) / 2
+            return 'BLOB', int((byte - 12) / 2)
         elif byte > 13 and (byte % 2):
-            return 'TEXT', (byte - 13) / 2
+            return 'TEXT', int((byte - 13) / 2)
         else:
             return 'Unknown', 0
 

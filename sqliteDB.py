@@ -45,20 +45,20 @@ class SQLITE():
 
     def dbheader(self):
         self.header = _memcpy(self.buf, _SQLiteDBHeader)
-        if self.header.signature[0:12] == 'SQLite format':
+        if self.header.signature[0:12] == b'SQLite format':
             return 1, self.header
         else:
             return 0, []
 
     def getschemata(self):
-        CREATETABLE = 'CREATE TABLE'
+        CREATETABLE = b'CREATE TABLE'
         columnsdic = {}
-        for offset in xrange(len(self.buf)):
+        for offset in range(len(self.buf)):
             tablename = ''
             if CREATETABLE == self.buf[offset:offset+len(CREATETABLE)]:
                 columnlst = []
-                tablename = str(self.buf[offset+len(CREATETABLE):].split(' ')[1].split('(')[0].replace(' ', ''))
-                strcolumns = str(self.buf[offset+len(CREATETABLE):].split('(')[1].split(')')[0])
+                tablename = self.buf[offset+len(CREATETABLE):].split(b' ')[1].split(b'(')[0].replace(b' ', b'').decode('utf8')
+                strcolumns = self.buf[offset+len(CREATETABLE):].split(b'(')[1].split(b')')[0].decode('utf8')
                 if strcolumns[0] == ' ':    # remove byte if first byte is space
                     strcolumns = strcolumns[1:]
 
@@ -94,7 +94,7 @@ class SQLITE():
 
 
 def main():
-    print 'test'
+    print('test')
 
 
 

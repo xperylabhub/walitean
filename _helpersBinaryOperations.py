@@ -55,7 +55,7 @@ def get_bitstring(integer, length):
         resultString = bitString
         # eventually add some zeroes
         while (len(resultString) < length):
-	    resultString = "0" + resultString
+            resultString = "0" + resultString
 
     return resultString
 
@@ -65,9 +65,9 @@ def get_bitstring(integer, length):
 # @return:		representation of integer as binary string
 def bin(integer):
     if (integer <= 1):
-	return str(integer)
+        return str(integer)
     else:
-	return str(bin(integer >> 1)) + str(integer & 1)
+        return str(bin(integer >> 1)) + str(integer & 1)
 
 # Returns the integer value of the given binary string
 # @bitString:		binary string that will be converted to an integer number
@@ -77,8 +77,8 @@ def bin_to_int(bitString):
     resultInt = 0
     digit = 1
     while digit <= length:
-	resultInt += int(bitString[(digit - 1):digit]) * pow(2, length - digit)
-	digit += 1
+        resultInt += int(bitString[(digit - 1):digit]) * pow(2, length - digit)
+        digit += 1
     return resultInt
 
 # Returns the negation of the given binary string (e.g. "1001" returns "0110")
@@ -96,52 +96,42 @@ def negate(bitString):
 
 #-----------------Example-------------------
 if __name__ == "__main__":
-    print "----> Testing negate(bitString)"
-    print "negate(\"0\"):                         ", negate("0")
-    print "negate(\"1\"):                         ", negate("1")
-    print "negate(\"01\"):                        ", negate("01")
-    print "negate(\"10\"):                        ", negate("10")
-    print "negate(\"00000000\"):                  ", negate("00000000")
-    print "negate(\"11111111\"):                  ", negate("11111111")
-    print "negate(\"11011011\"):                  ", negate("11011011")
-    print "negate(\"101010011\"):                 ", negate("101010011")
+    print("----> Testing negate(bitString)")
+    print("negate(\"0\"):                         ", negate("0"))
+    print("negate(\"1\"):                         ", negate("1"))
+    print("negate(\"01\"):                        ", negate("01"))
+    print("negate(\"10\"):                        ", negate("10"))
+    print("negate(\"00000000\"):                  ", negate("00000000"))
+    print("negate(\"11111111\"):                  ", negate("11111111"))
+    print("negate(\"11011011\"):                  ", negate("11011011"))
+    print("negate(\"101010011\"):                 ", negate("101010011"))
 
-    print "----> Testing bin_to_int(bitString)"
-    print "bin_to_int(\"0\"):                       ", bin_to_int("0")
-    print "bin_to_int(\"1\"):                       ", bin_to_int("1")
-    print "bin_to_int(\"01\"):                      ", bin_to_int("01")
-    print "bin_to_int(\"10\"):                      ", bin_to_int("10")
-    print "bin_to_int(\"1000\"):                    ", bin_to_int("1000")
-    print "bin_to_int(\"1111\"):                    ", bin_to_int("1111")
-    print "bin_to_int(\"10000001\"):                ", bin_to_int("10000001")
-    print "bin_to_int(\"111111111\"):               ", bin_to_int("111111111")
+    print("----> Testing bin_to_int(bitString)")
+    print("bin_to_int(\"0\"):                       ", bin_to_int("0"))
+    print("bin_to_int(\"1\"):                       ", bin_to_int("1"))
+    print("bin_to_int(\"01\"):                      ", bin_to_int("01"))
+    print("bin_to_int(\"10\"):                      ", bin_to_int("10"))
+    print("bin_to_int(\"1000\"):                    ", bin_to_int("1000"))
+    print("bin_to_int(\"1111\"):                    ", bin_to_int("1111"))
+    print("bin_to_int(\"10000001\"):                ", bin_to_int("10000001"))
+    print("bin_to_int(\"111111111\"):               ", bin_to_int("111111111"))
 
-    print "----> Testing bin(integer)"
-    print "bin(0):                              ", bin(0)
-    print "bin(1):                              ", bin(1)
-    print "bin(01):                             ", bin(01)
-    print "bin(10):                             ", bin(10)
-    print "bin(00000000):                       ", bin(00000000)
-    print "bin(11111111):                       ", bin(11111111)
-    print "bin(11011011):                       ", bin(11011011)
-    print "bin(101010011):                      ", bin(101010011)
 
-    print "----> Testing get_bitstring(integer, length)"
-    print "get_bitstring(0, 4):                  ", get_bitstring(0, 4)
-    print "get_bitstring(1, 4):                  ", get_bitstring(1, 4)
-    print "get_bitstring(254, 8):                ", get_bitstring(254, 8)
-    print "get_bitstring(256, 8):                ", get_bitstring(256, 8)
-    print "get_bitstring(256, 16):               ", get_bitstring(256, 16)
-    print "get_bitstring(9652342, 8):            ", get_bitstring(9652342, 8)
-    print "get_bitstring(9652342, 16):           ", get_bitstring(9652342, 16)
-    print "get_bitstring(9652342, 32):           ", get_bitstring(9652342, 32)
+    print("----> Testing get_bitstring(integer, length)")
+    print("get_bitstring(0, 4):                  ", get_bitstring(0, 4))
+    print("get_bitstring(1, 4):                  ", get_bitstring(1, 4))
+    print("get_bitstring(254, 8):                ", get_bitstring(254, 8))
+    print("get_bitstring(256, 8):                ", get_bitstring(256, 8))
+    print("get_bitstring(256, 16):               ", get_bitstring(256, 16))
+    print("get_bitstring(9652342, 8):            ", get_bitstring(9652342, 8))
+    print("get_bitstring(9652342, 16):           ", get_bitstring(9652342, 16))
+    print("get_bitstring(9652342, 32):           ", get_bitstring(9652342, 32))
 
-    print "----> Testing twos_complement_to_int(two, lengthInByte)"
-    print "twos_complement_to_int(0, 1):           ", twos_complement_to_int(0, 1)
-    print "twos_complement_to_int(1, 1):           ", twos_complement_to_int(1, 1)
-    print "twos_complement_to_int(00000001, 4):    ", twos_complement_to_int(00000001, 1)
-    print "twos_complement_to_int(254, 1):         ", twos_complement_to_int(254, 1)
-    print "twos_complement_to_int(256, 1):         ", twos_complement_to_int(256, 1)
-    print "twos_complement_to_int(1024, 1):        ", twos_complement_to_int(1024, 1)
-    print "twos_complement_to_int(9652342, 1):     ", twos_complement_to_int(9652342, 1)
-    print "twos_complement_to_int(9652342, 2):     ", twos_complement_to_int(9652342, 2)
+    print("----> Testing twos_complement_to_int(two, lengthInByte)")
+    print("twos_complement_to_int(0, 1):           ", twos_complement_to_int(0, 1))
+    print("twos_complement_to_int(1, 1):           ", twos_complement_to_int(1, 1))
+    print("twos_complement_to_int(254, 1):         ", twos_complement_to_int(254, 1))
+    print("twos_complement_to_int(256, 1):         ", twos_complement_to_int(256, 1))
+    print("twos_complement_to_int(1024, 1):        ", twos_complement_to_int(1024, 1))
+    print("twos_complement_to_int(9652342, 1):     ", twos_complement_to_int(9652342, 1))
+    print("twos_complement_to_int(9652342, 2):     ", twos_complement_to_int(9652342, 2))
